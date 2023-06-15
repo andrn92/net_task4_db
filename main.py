@@ -18,7 +18,6 @@ def create_db(conn):
             id SERIAL PRIMARY KEY,
             number VARCHAR(40) NOT NULL,
             client_id INTEGER NOT NULL REFERENCES clients(id)
-
         )
         """
         )
