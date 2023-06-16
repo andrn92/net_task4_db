@@ -91,7 +91,7 @@ def change_client(conn, client_id:int, first_name=None, last_name=None, email=No
     if email:
         cur.execute("UPDATE clients SET email=%s WHERE id=%s;", (email, client_id))
     run = True
-    while run:
+    while run and numbers:
         if phone_id:
             if type(numbers) == list:
                 cur.execute("UPDATE phones SET number=%s WHERE id=%s;", (numbers[0], phone_id))
@@ -102,7 +102,7 @@ def change_client(conn, client_id:int, first_name=None, last_name=None, email=No
                 number = numbers
                 cur.execute("UPDATE phones SET number=%s WHERE client_id=%s;", (number, client_id))
                 run = False
-            elif type(numbers) not in [list, str, None]:
+            else:
                 numbers = input('Enter the correct phone number: ')
         else:
             if type(numbers) == list:
@@ -121,7 +121,7 @@ def change_client(conn, client_id:int, first_name=None, last_name=None, email=No
                     number = numbers
                     cur.execute("UPDATE phones SET number=%s WHERE client_id=%s;", (number, client_id))
                 run = False
-            elif type(numbers) not in [list, str, None]:
+            else:
                 numbers = input('Enter the correct phone number: ')
 
     cur.close()
@@ -157,13 +157,13 @@ if __name__ == '__main__':
         drop_tables(conn)
         create_db(conn)
         client_id = add_client(conn, 'Bob', 'Marshal', 'bobmarsh@gmail.com', '555')
-        change_client(conn, client_id, 'Alex', 'Small', 'alexsmall@gmail.com', '111')
-        res = find_client(conn, 'Alex', 'Small', 'alexsmall@gmail.com', '111')
+        change_client(conn, client_id, 'Alex', 'Small', 'alexsmall@gmail.com')
+        res = find_client(conn, 'Alex', 'Small', 'alexsmall@gmail.com', '555')
         print(res)
         add_phone(conn, client_id, '222')
         delete_phone(conn, client_id, '222')
         delete_client(conn, client_id)
-        res = find_client(conn, 'Alex', 'Small', 'alexsmall@gmail.com', '111')
+        res = find_client(conn, 'Alex', 'Small', 'alexsmall@gmail.com', '555')
         print(res)
         
     conn.close()
